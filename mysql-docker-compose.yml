@@ -7,7 +7,7 @@ services:
       MYSQL_USER: "test"
       MYSQL_PASSWORD: "password"
       MYSQL_ROOT_PASSWORD: "password"
-      MYSQL_DATABASE: "vms"
+      MYSQL_DATABASE: "cleaning"
     ports:
       - "3306:3306"
     volumes:
