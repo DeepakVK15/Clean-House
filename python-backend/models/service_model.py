@@ -1,4 +1,5 @@
 from .database import db
+from datetime import datetime
 
 
 class Service(db.Model):
@@ -7,7 +8,12 @@ class Service(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     price = db.Column(db.Float, nullable=False)
-    time_slots = db.Column(db.ARRAY(db.String), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    time = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False, default="ACTIVE")
     location = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)

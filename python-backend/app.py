@@ -79,18 +79,55 @@ def create_service():
     if user.user_type != "VENDOR":
         return make_response("User is not a vendor", 401)
 
-    new_service = service_model.Service(
-        area=data["area"],
-        name=data["name"],
-        description=data["description"],
-        price=data["price"],
-        time_slots=data["time_slots"],
-        location=data["location"],
-        user_id=data["user_id"],
-    )
-    database.db.session.add(new_service)
-    database.db.session.commit()
+    services = data["services"]
+
+    for service in services:
+        new_service = service_model.Service(
+            area=service["area"],
+            name=service["name"],
+            description=service["description"],
+            price=service["price"],
+            date=service["date"],
+            time=service["time"],
+            location=service["location"],
+            user_id=user.id,
+        )
+        database.db.session.add(new_service)
+        database.db.session.commit()
+
     return make_response("Service created", 201)
+
+
+# Route to book a service
+@app.route("/services/book", methods=["POST"])
+def book_service():
+    data = request.get_json()
+
+    user = user_model.User.query.filter_by(id=data["user_id"]).first()
+
+    if not user:
+        return make_response("User does not exist", 404)
+
+    if user.user_type != "CUSTOMER":
+        return make_response("User is not a customer", 401)
+
+    service = service_model.Service.query.filter_by(
+        id=data["service_id"]).first()
+
+    if not service:
+        return make_response("Service does not exist", 404)
+
+    if service.status != "ACTIVE":
+        return make_response("Service is not active", 401)
+
+    new_service_request = service_request_model.ServiceRequest(
+        service_id=data["service_id"],
+        customer_id=data["user_id"],
+        image=data["image"]
+    )
+    database.db.session.add(new_service_request)
+    database.db.session.commit()
+    return make_response("Service booked", 201)
 
 
 # Route to create feedback

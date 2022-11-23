@@ -1,4 +1,5 @@
 from .database import db
+from datetime import datetime
 
 
 class Feedback(db.Model):
@@ -8,3 +9,7 @@ class Feedback(db.Model):
     feedback = db.Column(db.String, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)

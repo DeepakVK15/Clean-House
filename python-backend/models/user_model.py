@@ -1,4 +1,5 @@
 from .database import db
+from datetime import datetime
 
 
 class User(db.Model):
@@ -9,3 +10,7 @@ class User(db.Model):
     user_type = db.Column(db.String, nullable=False)
     address = db.Column(db.String)
     phone = db.Column(db.String)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
