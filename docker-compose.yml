@@ -1,16 +1,15 @@
 version: "3"
 services:
   db:
-    image: "mysql:8.0"
-    container_name: "my_mysql"
+    image: "postgres:13.4"
+    container_name: "my_postgres"
     environment:
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "password"
-      MYSQL_ROOT_PASSWORD: "password"
-      MYSQL_DATABASE: "vms"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "cleaning"
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - ./my_dbdata:/var/lib/mysql
+      - ./my_dbdata:/var/lib/postgresql/data
 volumes:
   my_dbdata:
