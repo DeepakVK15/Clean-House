@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-from models import database, user
+from models import database, user, service, service_request, feedback
 
 app = Flask(__name__)
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://test:password@localhost/cleaning"
