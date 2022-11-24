@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, request, jsonify, make_response
 from models import database, user_model, service_model, service_request_model, feedback_model
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -71,6 +73,10 @@ def get_users():
 def create_service():
     data = request.get_json()
 
+    if "user_id" not in data or "start_date" not in data \
+            or "end_date" not in data or "start_time" not in data or "end_time" not in data:
+        return make_response("Missing data", 400)
+
     user = user_model.User.query.filter_by(id=data["user_id"]).first()
 
     if not user:
@@ -81,19 +87,29 @@ def create_service():
 
     services = data["services"]
 
-    for service in services:
-        new_service = service_model.Service(
-            area=service["area"],
-            name=service["name"],
-            description=service["description"],
-            price=service["price"],
-            date=service["date"],
-            time=service["time"],
-            location=service["location"],
-            user_id=user.id,
-        )
-        database.db.session.add(new_service)
-        database.db.session.commit()
+    start_hour = int(data["start_time"].split(":")[0])
+    end_hour = int(data["end_time"].split(":")[0])
+
+    start_date = datetime.datetime.strptime(data["start_date"], "%Y/%m/%d")
+    end_date = datetime.datetime.strptime(data["end_date"], "%Y/%m/%d")
+
+    time_delta = datetime.timedelta(days=1)
+
+    # Create service for each day and each hour
+    while start_date <= end_date:
+        for hour in range(start_hour, end_hour + 1):
+            for service in services:
+                new_service = service_model.Service(
+                    service_type=service,
+                    date=start_date,
+                    time=f"{hour}:00",
+                    location=data["location"],
+                    user_id=data["user_id"],
+                )
+                database.db.session.add(new_service)
+        start_date += time_delta
+
+    database.db.session.commit()
 
     return make_response("Service created", 201)
 

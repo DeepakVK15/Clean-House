@@ -9,7 +9,7 @@ class ServiceRequest(db.Model):
     customer_id = db.Column(
         db.Integer, db.ForeignKey("user.id"), nullable=False)
     image = db.Column(db.String)
-    status = db.Column(db.String, nullable=False, default="CREATED")
+    status = db.Column(db.String, nullable=False, default="PENDING")
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,

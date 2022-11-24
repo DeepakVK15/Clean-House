@@ -4,8 +4,7 @@ from datetime import datetime
 
 class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    area = db.Column(db.String, nullable=False)
-    name = db.Column(db.String, nullable=False)
+    service_type = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     price = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
