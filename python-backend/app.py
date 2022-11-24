@@ -138,8 +138,6 @@ def book_service():
     if service.status != "ACTIVE":
         return make_response("Service is not active", 401)
 
-    database.db.session.begin()
-
     new_service_request = service_request_model.ServiceRequest(
         service_id=data["service_id"],
         customer_id=data["user_id"],
