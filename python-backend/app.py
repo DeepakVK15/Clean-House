@@ -182,5 +182,22 @@ def create_feedback():
         return make_response("Service request does not exist", 404)
 
 
+# Route for vendor to update service status
+@app.route("/services/<service_request_id>", methods=["PUT"])
+def update_service_status(service_request_id):
+    data = request.get_json()
+
+    service_request = service_request_model.ServiceRequest.query.filter_by(
+        id=service_request_id).first()
+
+    if not service_request:
+        return make_response("Service request does not exist", 404)
+
+    service_request.status = data["status"]
+
+    database.db.session.commit()
+    return make_response("Service status updated", 200)
+
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
