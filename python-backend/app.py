@@ -100,10 +100,12 @@ def create_service():
         for hour in range(start_hour, end_hour + 1):
             for service in services:
                 new_service = service_model.Service(
-                    service_type=service,
+                    service_type=service["service_type"],
+                    description=service["description"],
                     date=start_date,
                     time=f"{hour}:00",
-                    location=data["location"],
+                    price=service["price"],
+                    location=service["location"],
                     user_id=data["user_id"],
                 )
                 database.db.session.add(new_service)
@@ -136,12 +138,18 @@ def book_service():
     if service.status != "ACTIVE":
         return make_response("Service is not active", 401)
 
+    database.db.session.begin()
+
     new_service_request = service_request_model.ServiceRequest(
         service_id=data["service_id"],
         customer_id=data["user_id"],
         image=data["image"]
     )
     database.db.session.add(new_service_request)
+
+    # Update service status to BOOKED
+    service.status = "BOOKED"
+
     database.db.session.commit()
     return make_response("Service booked", 201)
 
