@@ -199,5 +199,53 @@ def update_service_status(service_request_id):
     return make_response("Service status updated", 200)
 
 
+# Route to get all services that are active and satisfy the search criteria
+@app.route("/services", methods=["GET"])
+def get_services():
+    today_date = datetime.datetime.now().date()
+
+    # Get all services that are active and have a date greater than or equal to today's date
+    services = service_model.Service.query.filter(
+        service_model.Service.status == "ACTIVE",
+        service_model.Service.date >= today_date,
+    ).all()
+
+    result = []
+
+    for service in services:
+        service_data = {}
+        service_data["id"] = service.id
+        service_data["service_type"] = service.service_type
+        service_data["description"] = service.description
+        # service_data["date"] = service.date.strftime("%Y/%m/%d")
+        service_data["date"] = service.date
+        service_data["time"] = service.time
+        service_data["price"] = service.price
+        service_data["location"] = service.location
+        service_data["user_id"] = service.user_id
+        result.append(service_data)
+
+    query_date = request.args.get("date")
+    if query_date:
+        query_date = datetime.datetime.strptime(query_date, "%Y/%m/%d").date()
+    print(f"query date {query_date}")
+    print(f"service {services[0].date == query_date}")
+    query_location = request.args.get("location")
+    query_service_type = request.args.get("service-type")
+
+    if query_date:
+        result = list(filter(lambda x: x["date"] == query_date, result))
+
+    if query_location:
+        result = list(
+            filter(lambda x: x["location"] == query_location, result))
+
+    if query_service_type:
+        result = list(
+            filter(lambda x: x["service_type"] == query_service_type, result))
+
+    return jsonify({"services": result})
+
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
