@@ -30,8 +30,26 @@ class Signup extends React.Component {
       state: "",
       zip: "",
       gender: "",
+
+      fullName: "",
+      password: "",
+      userType: "",
+      address: "",
+      phone: "",
     };
   }
+
+  updateFullName = (e) => {
+    this.setState({ fullName: e.target.value });
+  };
+
+  updateUserType = (e) => {
+    this.setState({ userType: e.target.value });
+  };
+
+  updatePhone = (e) => {
+    this.setState({ phone: e.target.value });
+  };
 
   updateFName = (e) => {
     this.setState({ fName: e.target.value });
@@ -95,33 +113,40 @@ class Signup extends React.Component {
       city,
       state,
       zip,
+      phone,
+      userType,
     } = this.state;
 
-    axios
-      .post(
-        `${serverURL}/api/auth/register?email=` +
-          email +
-          `&password=` +
-          password +
-          `&fName=` +
-          fName +
-          `&lName=` +
-          lName +
-          `&gender=` +
-          gender +
-          `&dob=` +
-          dob +
-          `&address=` +
-          address +
-          `&city=` +
-          city +
-          `&state=` +
-          state +
-          `&zip=` +
-          zip +
-          `&mName=` +
-          mName
-      )
+    // axios
+    // .post(
+    //   `${serverURL}/users?email=` +
+    //     email +
+    //     `&password=` +
+    //     password +
+    //     // `&fName=` +
+    //     // fName +
+    //     // `&lName=` +
+    //     // lName +
+    //     `&user_type=` +
+    //     userType +
+    //     `&address=` +
+    //     address +
+    //     `&phone=` +
+    //     phone
+    // )
+
+    axios({
+      method: "post",
+      url: `${serverURL}/users`,
+      headers: {},
+      data: {
+        email: email,
+        password: password,
+        user_type: userType,
+        address: address,
+        phone: phone,
+      },
+    })
       .then((res) => {
         swal({
           title: "Success",
@@ -159,7 +184,7 @@ class Signup extends React.Component {
                 required
               />
             </Grid>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <TextField
                 label="Middle Name"
                 variant="outlined"
@@ -170,15 +195,42 @@ class Signup extends React.Component {
                 }}
                 style={{ width: "100%" }}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={4}>
               <TextField
                 label="Last Name"
                 variant="outlined"
                 size="small"
                 onChange={this.updateLName}
+                style={{ width: "100%" }}
                 required
-                style={{ width: "75%" }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label="Phone"
+                variant="outlined"
+                size="small"
+                onChange={this.updatePhone}
+                style={{
+                  gridArea: "phone",
+                  width: "100%",
+                }}
+                // style={{ width: "100%" }}
+                required
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={1}>
+            <Grid item xs={4}>
+              <TextField
+                label="Address"
+                type="address"
+                variant="outlined"
+                size="small"
+                onChange={this.updateAddress}
+                required
+                style={{ width: "300%" }}
               />
             </Grid>
           </Grid>
@@ -211,7 +263,7 @@ class Signup extends React.Component {
               />
             </Grid>
 
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <TextField
                 id="date"
                 label="DOB"
@@ -224,25 +276,24 @@ class Signup extends React.Component {
                 }}
                 required
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           `{" "}
           <FormControl component="fieldset">
-            <RadioGroup row onChange={this.updateGender}>
-              <FormControlLabel value="male" control={<Radio required={true}/>} label="Male" />
-              <FormControlLabel 
-                value="female"
-                control={<Radio required={true}/>}
-                label="Female"
+            <RadioGroup row onChange={this.updateUserType}>
+              <FormControlLabel
+                value="VENDOR"
+                control={<Radio required={true} />}
+                label="Vendor"
               />
               <FormControlLabel
-                value="others"
-                control={<Radio required={true}/>}
-                label="Others"
+                value="CUSTOMER"
+                control={<Radio required={true} />}
+                label="Customer"
               />
             </RadioGroup>
           </FormControl>
-          <Grid container spacing={1}>
+          {/* <Grid container spacing={1}>
             <Grid item xs={6}>
               <TextField
                 label="Street and Number"
@@ -292,19 +343,11 @@ class Signup extends React.Component {
                 style={{ width: "100%" }}
               />
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            variant="outlined"
-            size="small"
-          >
+          </Grid> */}
+          <Button type="submit" variant="outlined" size="small">
             Sign Up
           </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={this.cancelSignUp}
-          >
+          <Button variant="outlined" size="small" onClick={this.cancelSignUp}>
             Cancel
           </Button>
         </form>
