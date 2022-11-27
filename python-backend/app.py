@@ -258,12 +258,22 @@ def get_services():
 # Route to get all service requests for a user - past and future
 @app.route("/services/requests/<user_id>", methods=["GET"])
 def get_service_requests(user_id):
-    service_requests = service_request_model.ServiceRequest.query\
-        .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
-        .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
-        .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
-        .filter(service_request_model.ServiceRequest.customer_id == user_id)\
-        .all()
+    service_requests = []
+    user = user_model.User.query.filter_by(id=user_id).first()
+    if(user.user_type=="CUSTOMER"):
+        service_requests = service_request_model.ServiceRequest.query\
+            .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+            .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+            .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+            .filter(service_request_model.ServiceRequest.customer_id == user_id)\
+            .all()
+    else:
+        service_requests = service_request_model.ServiceRequest.query\
+            .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+            .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+            .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+            .filter(service_model.Service.user_id == user_id)\
+            .all()
 
     result = []
 
@@ -296,49 +306,6 @@ def get_service_requests(user_id):
             future_services.append(service)
 
     return jsonify({"past_services": past_services, "future_services": future_services})
-
-# Route to get all service requests for a user - past and future
-@app.route("/services/vendor/<user_id>", methods=["GET"])
-def get_vendor_service_requests(user_id):
-    service_requests = service_request_model.ServiceRequest.query\
-        .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
-        .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
-        .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
-        .filter(service_model.Service.user_id == user_id)\
-        .all()
-
-    result = []
-
-    for service_request in service_requests:
-        service_request_data = {}
-        print(service_request)
-        service_request_data["id"] = service_request.id
-        service_request_data["customer_id"] = service_request.customer_id
-        service_request_data["status"] = service_request.status
-        service_request_data["image"] = service_request.image
-        service_request_data["feedback"] = {
-            "feedback": service_request.feedback,
-            "rating": service_request.rating
-        }
-        service_request_data["service_type"] = service_request.service_type
-        service_request_data["description"] = service_request.description
-        service_request_data["date"] = service_request.date
-        service_request_data["time"] = service_request.time
-        service_request_data["price"] = service_request.price
-        service_request_data["location"] = service_request.location
-        result.append(service_request_data)
-
-    # Add services that have a date before today in past_services list and services that have a date after today in future_services list
-    past_services = []
-    future_services = []
-    for service in result:
-        if service["date"] < datetime.datetime.now().date():
-            past_services.append(service)
-        else:
-            future_services.append(service)
-
-    return jsonify({"past_services": past_services, "future_services": future_services})
-
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
