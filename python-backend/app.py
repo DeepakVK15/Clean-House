@@ -1,11 +1,12 @@
 import datetime
-
+from flask_cors import CORS
 from flask import Flask, request, jsonify, make_response
 from models import database, user_model, service_model, service_request_model, feedback_model
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+CORS(app)
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://test:password@localhost/cleaning"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:password@localhost:5432/cleaning"
 
