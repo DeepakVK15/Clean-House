@@ -23,7 +23,7 @@ class Login extends React.Component {
     const { email, password } = this.state;
     const user = { email, password };
     axios
-      .post(`${serverURL}/api/auth/login`, user)
+      .post(`${serverURL}/login`, user)
       .then((res) => {
         console.log("user login");
         const { accessToken } = res.data;

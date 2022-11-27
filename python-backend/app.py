@@ -1,5 +1,5 @@
 import datetime
-
+from flask_cors import CORS
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from models import database, user_model, service_model, service_request_model, feedback_model
