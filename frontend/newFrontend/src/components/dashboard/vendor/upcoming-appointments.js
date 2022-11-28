@@ -15,9 +15,11 @@ import Paper from "@mui/material/Paper";
 
 export const UpcomingAppts = (props) => {
   const email = localStorage.getItem("email");
-  const id = localStorage.getItem("userId");
+  const [id, setId] = useState(localStorage.getItem("userId"));
+  // const id = localStorage.getItem("userId");
   const userType = localStorage.getItem("user_type");
   const [futureServices, setFutureServices] = useState([]);
+  // const flag = useState(0);
 
   useEffect(() => {
     axios
@@ -31,6 +33,21 @@ export const UpcomingAppts = (props) => {
         console.log("Err ", err);
       });
   }, []);
+
+  const onApprovalClick = (service_id, status) => {
+    // console.log("aaaaaaaaaaaaaaa", service_id + " " + status);
+    axios
+      .put(`${serverURL}/services/${service_id}`, { status: status })
+      .then((res) => {
+        console.log("onApprovalClick");
+        console.log("testtt3", res.data);
+        // flag == 0 ? 1 : 0;
+        // setFutureServices(res.data.future_services);
+      })
+      .catch((err) => {
+        console.log("Err ", err);
+      });
+  };
 
   return (
     // <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
@@ -84,17 +101,27 @@ export const UpcomingAppts = (props) => {
                                   gridTemplateColumns: "repeat(2, 1fr)",
                                 }}
                               >
-                                <Button type="submit" variant="outlined" size="small">
+                                <Button
+                                  type="submit"
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() => onApprovalClick(row.id, "REJECTED")}
+                                >
                                   Reject
                                 </Button>
 
-                                <Button type="submit" variant="outlined" size="small">
-                                  Confirm
+                                <Button
+                                  type="submit"
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() => onApprovalClick(row.id, "APPROVED")}
+                                >
+                                  Accept
                                 </Button>
                               </Box>
                             </>
                           ) : (
-                            "TEST"
+                            row.status
                           )}
                         </TableCell>
                       </TableRow>
