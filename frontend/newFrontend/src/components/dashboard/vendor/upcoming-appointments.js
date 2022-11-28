@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import MoneyIcon from "@mui/icons-material/Money";
 import { serverURL } from "../../../../../newFrontend/src/utils/config";
@@ -48,13 +48,13 @@ export const UpcomingAppts = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Service Type</TableCell>
-                    <TableCell align="right">Date</TableCell>
-                    <TableCell align="right">Time</TableCell>
-                    <TableCell align="right">Location</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Description</TableCell>
-                    <TableCell align="right">Customer ID</TableCell>
-                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    <TableCell align="center">Time</TableCell>
+                    <TableCell align="center">Location</TableCell>
+                    <TableCell align="center">Price</TableCell>
+                    <TableCell align="center">Description</TableCell>
+                    <TableCell align="center">Customer ID</TableCell>
+                    <TableCell align="center">Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,16 +65,38 @@ export const UpcomingAppts = (props) => {
                         key={row.id}
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
-                        <TableCell component="th" scope="row">
+                        <TableCell align="center" component="th" scope="row">
                           {row.service_type}
                         </TableCell>
-                        <TableCell align="right">{row.date}</TableCell>
-                        <TableCell align="right">{row.time}</TableCell>
-                        <TableCell align="right">{row.location}</TableCell>
-                        <TableCell align="right">{row.price}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
-                        <TableCell align="right">{row.customer_id}</TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
+                        <TableCell align="center">{row.date}</TableCell>
+                        <TableCell align="center">{row.time}</TableCell>
+                        <TableCell align="center">{row.location}</TableCell>
+                        <TableCell align="center">{row.price}</TableCell>
+                        <TableCell align="center">{row.description}</TableCell>
+                        <TableCell align="center">{row.customer_id}</TableCell>
+                        <TableCell align="center">
+                          {row.status == "PENDING" ? (
+                            <>
+                              <Box
+                                sx={{
+                                  display: "grid",
+                                  gap: 2,
+                                  gridTemplateColumns: "repeat(2, 1fr)",
+                                }}
+                              >
+                                <Button type="submit" variant="outlined" size="small">
+                                  Reject
+                                </Button>
+
+                                <Button type="submit" variant="outlined" size="small">
+                                  Confirm
+                                </Button>
+                              </Box>
+                            </>
+                          ) : (
+                            "TEST"
+                          )}
+                        </TableCell>
                       </TableRow>
                     );
                   })}

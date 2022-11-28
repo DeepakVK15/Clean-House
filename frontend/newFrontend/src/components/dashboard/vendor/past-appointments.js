@@ -32,7 +32,8 @@ export const PastAppts = (props) => {
   }, []);
 
   return (
-    <Card {...props}>
+    // <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
+    <Card sx={{ height: "100%" }} {...props}>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
@@ -46,13 +47,13 @@ export const PastAppts = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Service Type</TableCell>
-                    <TableCell align="right">Date</TableCell>
-                    <TableCell align="right">Time</TableCell>
-                    <TableCell align="right">Location</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Description</TableCell>
-                    <TableCell align="right">Customer ID</TableCell>
-                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="Center">Date</TableCell>
+                    <TableCell align="Center">Time</TableCell>
+                    <TableCell align="Center">Location</TableCell>
+                    <TableCell align="Center">Price</TableCell>
+                    <TableCell align="Center">Description</TableCell>
+                    <TableCell align="Center">Customer ID</TableCell>
+                    <TableCell align="Center">Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -63,16 +64,16 @@ export const PastAppts = (props) => {
                         key={row.id}
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
-                        <TableCell component="th" scope="row">
+                        <TableCell align="Center" component="th" scope="row">
                           {row.service_type}
                         </TableCell>
-                        <TableCell align="right">{row.date}</TableCell>
-                        <TableCell align="right">{row.time}</TableCell>
-                        <TableCell align="right">{row.location}</TableCell>
-                        <TableCell align="right">{row.price}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
-                        <TableCell align="right">{row.customer_id}</TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
+                        <TableCell align="Center">{row.date}</TableCell>
+                        <TableCell align="Center">{row.time}</TableCell>
+                        <TableCell align="Center">{row.location}</TableCell>
+                        <TableCell align="Center">{row.price}</TableCell>
+                        <TableCell align="Center">{row.description}</TableCell>
+                        <TableCell align="Center">{row.customer_id}</TableCell>
+                        <TableCell align="Center">{row.status}</TableCell>
                       </TableRow>
                     );
                   })}
