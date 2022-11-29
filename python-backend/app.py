@@ -1,11 +1,13 @@
 import datetime
-
+from flask_cors import CORS
 from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
 from models import database, user_model, service_model, service_request_model, feedback_model
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+CORS(app)
 # app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://test:password@localhost/cleaning"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:password@localhost:5432/cleaning"
 
@@ -43,7 +45,13 @@ def login():
     user = user_model.User.query.filter_by(email=data["email"]).first()
     if user:
         if check_password_hash(user.password, data["password"]):
-            return jsonify({"user_id": user.id})
+            user_data = {}
+            user_data["id"] = user.id
+            user_data["email"] = user.email
+            user_data["user_type"] = user.user_type
+            user_data["address"] = user.address
+            user_data["phone"] = user.phone
+            return jsonify({"curr_user": user_data})
         else:
             return make_response("Incorrect password", 401)
     else:
@@ -250,12 +258,22 @@ def get_services():
 # Route to get all service requests for a user - past and future
 @app.route("/services/requests/<user_id>", methods=["GET"])
 def get_service_requests(user_id):
-    service_requests = service_request_model.ServiceRequest.query\
-        .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
-        .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
-        .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
-        .filter(service_request_model.ServiceRequest.customer_id == user_id)\
-        .all()
+    service_requests = []
+    user = user_model.User.query.filter_by(id=user_id).first()
+    if(user.user_type=="CUSTOMER"):
+        service_requests = service_request_model.ServiceRequest.query\
+            .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+            .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+            .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+            .filter(service_request_model.ServiceRequest.customer_id == user_id)\
+            .all()
+    else:
+        service_requests = service_request_model.ServiceRequest.query\
+            .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+            .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+            .add_columns(service_request_model.ServiceRequest.id, service_request_model.ServiceRequest.service_id, service_request_model.ServiceRequest.customer_id, service_request_model.ServiceRequest.status, service_request_model.ServiceRequest.image, service_model.Service.service_type, service_model.Service.description, service_model.Service.date, service_model.Service.time, service_model.Service.price, service_model.Service.location, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+            .filter(service_model.Service.user_id == user_id)\
+            .all()
 
     result = []
 
@@ -289,6 +307,32 @@ def get_service_requests(user_id):
 
     return jsonify({"past_services": past_services, "future_services": future_services})
 
+# Route to get a feedback
+@app.route("/feedback/<service_id>", methods=["GET"])
+def get_feedback(service_id):
+    service = service_model.Service.query.filter_by(id=service_id).first()
+
+    if not service:
+        return make_response("No service for this id exists", 404)
+
+    feedback = service_request_model.ServiceRequest.query\
+        .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+        .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+        .add_columns(feedback_model.Feedback.id, service_request_model.ServiceRequest.service_id, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+        .filter(service_model.Service.id == service_id)\
+        .first()
+ 
+    if not feedback:
+        return make_response("No feedback for this service id exists", 404)
+    
+    feedback_data = {}
+    feedback_data["id"] = feedback.id
+    feedback_data["service_id"] = feedback.service_id
+    feedback_data["rating"] = feedback.rating
+    feedback_data["image"] = feedback.image
+    feedback_data["feedback"] = feedback.feedback    
+
+    return jsonify({"feedback": feedback_data})
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
