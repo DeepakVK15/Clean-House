@@ -307,5 +307,31 @@ def get_service_requests(user_id):
 
     return jsonify({"past_services": past_services, "future_services": future_services})
 
+# Route to get a feedback
+@app.route("/feedback/<service_id>", methods=["GET"])
+def get_feedback(service_id):
+    service = service_model.Service.query.filter_by(id=service_id).first()
+
+    if not service:
+        return make_response("No service for this id exists", 404)
+
+    feedback = service_request_model.ServiceRequest.query\
+        .join(service_model.Service, service_model.Service.id == service_request_model.ServiceRequest.service_id)\
+        .join(feedback_model.Feedback, feedback_model.Feedback.service_request_id == service_request_model.ServiceRequest.id, isouter=True)\
+        .add_columns(feedback_model.Feedback.id, service_request_model.ServiceRequest.service_id, feedback_model.Feedback.feedback, feedback_model.Feedback.rating, feedback_model.Feedback.image)\
+        .filter(service_model.Service.id == service_id)\
+        .first()
+ 
+    if not feedback:
+        return make_response("No feedback for this service id exists", 404)
+    
+    feedback_data = {}
+    feedback_data["id"] = feedback.id
+    feedback_data["service_id"] = feedback.service_id
+    feedback_data["rating"] = feedback.rating
+    feedback_data["image"] = feedback.image    
+
+    return jsonify({"feedback": feedback_data})
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
