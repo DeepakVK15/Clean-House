@@ -329,7 +329,8 @@ def get_feedback(service_id):
     feedback_data["id"] = feedback.id
     feedback_data["service_id"] = feedback.service_id
     feedback_data["rating"] = feedback.rating
-    feedback_data["image"] = feedback.image    
+    feedback_data["image"] = feedback.image
+    feedback_data["feedback"] = feedback.feedback    
 
     return jsonify({"feedback": feedback_data})
 
