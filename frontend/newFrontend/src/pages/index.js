@@ -17,7 +17,7 @@ const Page = () => (
       }}
     >
       <Container maxWidth={false}>
-        <Grid container spacing={3}>
+        <Grid container direction="column" spacing={3}>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <UpcomingAppts />
           </Grid>
