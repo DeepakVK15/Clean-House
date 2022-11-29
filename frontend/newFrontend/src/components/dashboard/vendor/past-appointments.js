@@ -35,7 +35,7 @@ export const PastAppts = (props) => {
     // <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
     <Card sx={{ height: "100%" }} {...props}>
       <CardContent>
-        <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
+        <Grid container direction="column" spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="overline">
               Past Appointments
