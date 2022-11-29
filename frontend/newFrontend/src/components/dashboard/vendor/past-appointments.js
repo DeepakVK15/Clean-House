@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import PeopleIcon from "@mui/icons-material/PeopleOutlined";
 import { useEffect, useState } from "react";
@@ -31,9 +31,23 @@ export const PastAppts = (props) => {
       });
   }, []);
 
+  //Fix the reviews button
+  const onReviewsClick = (service_id) => {
+    // console.log("aaaaaaaaaaaaaaa", service_id + " " + status);
+    axios
+      .get(`${serverURL}/services/reviews/${service_id}`)
+      .then((res) => {
+        console.log("onReviewsClick");
+        console.log("testtt3", res.data);
+      })
+      .catch((err) => {
+        console.log("Err ", err);
+      });
+  };
+
   return (
-    // <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
-    <Card sx={{ height: "100%" }} {...props}>
+    <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
+      {/* <Card sx={{ height: "100%" }} {...props}> */}
       <CardContent>
         <Grid container direction="column" spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
@@ -73,7 +87,17 @@ export const PastAppts = (props) => {
                         <TableCell align="Center">{row.price}</TableCell>
                         <TableCell align="Center">{row.description}</TableCell>
                         <TableCell align="Center">{row.customer_id}</TableCell>
-                        <TableCell align="Center">{row.status}</TableCell>
+                        <TableCell align="Center">
+                          <Button
+                            type="submit"
+                            variant="outlined"
+                            size="small"
+                            onClick={() => onReviewsClick(row.id)}
+                            style={{ backgroundColor: "blue", color: "white" }}
+                          >
+                            Read Reviews
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     );
                   })}
