@@ -95,7 +95,7 @@ export const PastAppts = (props) => {
                             onClick={() => onReviewsClick(row.id)}
                             style={{ backgroundColor: "blue", color: "white" }}
                           >
-                            Read Reviews
+                            View Feedback
                           </Button>
                         </TableCell>
                       </TableRow>
