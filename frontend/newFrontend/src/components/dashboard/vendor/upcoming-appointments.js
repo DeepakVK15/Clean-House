@@ -106,6 +106,7 @@ export const UpcomingAppts = (props) => {
                                   variant="outlined"
                                   size="small"
                                   onClick={() => onApprovalClick(row.id, "REJECTED")}
+                                  style={{ backgroundColor: "red", color: "white" }}
                                 >
                                   Reject
                                 </Button>
@@ -115,6 +116,7 @@ export const UpcomingAppts = (props) => {
                                   variant="outlined"
                                   size="small"
                                   onClick={() => onApprovalClick(row.id, "APPROVED")}
+                                  style={{ backgroundColor: "green", color: "white" }}
                                 >
                                   Accept
                                 </Button>
