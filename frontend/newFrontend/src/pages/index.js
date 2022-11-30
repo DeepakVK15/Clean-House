@@ -3,6 +3,7 @@ import { Box, Container, Grid } from "@mui/material";
 import { UpcomingAppts } from "../components/dashboard/vendor/upcoming-appointments";
 import { PastAppts } from "../components/dashboard/vendor/past-appointments";
 import { DashboardLayout } from "../components/dashboard-layout";
+import CreateService from "../components/dashboard/vendor/create-service";
 
 const Page = () => (
   <>
@@ -18,6 +19,9 @@ const Page = () => (
     >
       <Container maxWidth={false}>
         <Grid container direction="column" spacing={3}>
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <CreateService />
+          </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <UpcomingAppts />
           </Grid>
