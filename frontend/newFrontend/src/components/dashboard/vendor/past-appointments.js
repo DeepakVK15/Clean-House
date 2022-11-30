@@ -11,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import CustomizedDialogs from "./service-feedback";
 
 export const PastAppts = (props) => {
   const email = localStorage.getItem("email");
@@ -33,16 +34,16 @@ export const PastAppts = (props) => {
 
   //Fix the reviews button
   const onReviewsClick = (service_id) => {
-    // console.log("aaaaaaaaaaaaaaa", service_id + " " + status);
-    axios
-      .get(`${serverURL}/services/reviews/${service_id}`)
-      .then((res) => {
-        console.log("onReviewsClick");
-        console.log("testtt3", res.data);
-      })
-      .catch((err) => {
-        console.log("Err ", err);
-      });
+    console.log("onReviewsClick", service_id);
+    // axios
+    //   .get(`${serverURL}/services/reviews/${service_id}`)
+    //   .then((res) => {
+    //     console.log("onReviewsClick");
+    //     console.log("testtt3", res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log("Err ", err);
+    //   });
   };
 
   return (
@@ -88,7 +89,7 @@ export const PastAppts = (props) => {
                         <TableCell align="Center">{row.description}</TableCell>
                         <TableCell align="Center">{row.customer_id}</TableCell>
                         <TableCell align="Center">
-                          <Button
+                          {/* <Button
                             type="submit"
                             variant="outlined"
                             size="small"
@@ -96,7 +97,8 @@ export const PastAppts = (props) => {
                             style={{ backgroundColor: "blue", color: "white" }}
                           >
                             View Feedback
-                          </Button>
+                          </Button> */}
+                          <CustomizedDialogs id={row.id} />
                         </TableCell>
                       </TableRow>
                     );
