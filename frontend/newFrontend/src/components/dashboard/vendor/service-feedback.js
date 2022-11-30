@@ -78,6 +78,7 @@ export default function CustomizedDialogs(id) {
       .then((res) => {
         console.log("onReviewsClick");
         console.log("testtt3", service_id);
+        setFeedback(res.data.feedback.feedback);
       })
       .catch((err) => {
         console.log("Err ", err);
