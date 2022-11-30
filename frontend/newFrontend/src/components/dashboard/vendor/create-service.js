@@ -11,7 +11,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { serverURL } from "../../../utils/config";
-import { TextField } from "@mui/material";
+// import dayjs from "dayjs";
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { parse, stringify, toJSON, fromJSON } from "flatted";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,31 +65,61 @@ export default function CreateService() {
   const [location, setLocation] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [startDate, setStartDate] = React.useState(Date());
-  const [endDate, setEndDate] = React.useState(Date());
-  const [startTime, setStartTime] = React.useState(Date());
-  const [endTime, setEndTime] = React.useState(Date());
+  const [startDate, setStartDate] = React.useState();
+  const [endDate, setEndDate] = React.useState();
+  const [startTime, setStartTime] = React.useState();
+  const [endTime, setEndTime] = React.useState();
 
-  const onCreateServiceClick = () => {
+  const handleOpen = () => {
     setOpen(true);
-    // axios
-    //   .get(`${serverURL}/feedback/${service_id}`)
-    //   .then((res) => {
-    //     console.log("onReviewsClick");
-    //     console.log("testtt3", service_id);
-    //     setFeedback(res.data.feedback.feedback);
-    //   })
-    //   .catch((err) => {
-    //     console.log("Err ", err);
-    //   });
   };
+
   const handleClose = () => {
     setOpen(false);
+    const data = {
+      user_id: id,
+      start_date: startDate,
+      end_date: endDate,
+      start_time: startTime,
+      end_time: endTime,
+      services: [
+        {
+          service_type: serviceType,
+          location: location,
+          price: price,
+          description: description,
+        },
+      ],
+    };
+    console.log("eeeeeeeeee", stringify(data));
+
+    axios
+      .post(`${serverURL}/services`, stringify(data))
+      .then(() => {
+        console.log("onCreateServices");
+      })
+      .catch((err) => {
+        console.log("Err ", err);
+      });
+  };
+
+  const handleStarttimeChange = (newValue) => {
+    setStartDate(newValue.format("YYYY/MM/DD"));
+    setStartTime(newValue.format("HH:mm"));
+    console.log("startDate", startDate);
+    console.log("startTime", startTime);
+  };
+
+  const handleEndtimeChange = (newValue) => {
+    setEndDate(newValue.format("YYYY/MM/DD"));
+    setEndTime(newValue.format("HH:mm"));
+    console.log("endDate", endDate);
+    console.log("endTime", endTime);
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={onCreateServiceClick}>
+      <Button variant="outlined" onClick={handleOpen}>
         Create Service
       </Button>
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
@@ -92,27 +128,51 @@ export default function CreateService() {
         </BootstrapDialogTitle>
         <DialogContent dividers>
           Service Type
-          <TextField id="outlined-basic" label="Service Type" variant="outlined" />
+          <TextField
+            id="outlined-basic"
+            label="Service Type"
+            variant="outlined"
+            onChange={(newValue) => setServiceType(newValue)}
+          />
           Location
-          <TextField id="outlined-basic" label="Location" variant="outlined" />
+          <TextField
+            id="outlined-basic"
+            label="Location"
+            variant="outlined"
+            onChange={(newValue) => setLocation(newValue)}
+          />
           Price
-          <TextField id="outlined-basic" label="Price" variant="outlined" />
+          <TextField
+            id="outlined-basic"
+            label="Price"
+            variant="outlined"
+            onChange={(newValue) => setPrice(newValue)}
+          />
           Description
-          <TextField id="outlined-basic" label="Description" variant="outlined" />
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                label="Start Date Picker"
-                value={startDate}
-                onChange={(newValue) => {
-                  setStartDate(newValue);
-                }}
-              />
-            </LocalizationProvider> */}
+          <TextField
+            id="outlined-basic"
+            label="Description"
+            variant="outlined"
+            onChange={(newValue) => setDescription(newValue)}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Start Datetime"
+              value={dayjs()}
+              onChange={handleStarttimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <DateTimePicker
+              label="End Datetime"
+              value={dayjs()}
+              onChange={handleEndtimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Close
+            Create
           </Button>
         </DialogActions>
       </BootstrapDialog>
