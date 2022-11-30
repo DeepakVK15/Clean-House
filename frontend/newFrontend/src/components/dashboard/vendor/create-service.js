@@ -18,6 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { parse, stringify, toJSON, fromJSON } from "flatted";
+import { Box } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -120,59 +121,67 @@ export default function CreateService() {
   return (
     <div>
       <Button variant="outlined" onClick={handleOpen}>
-        Create Service
+        Create A New Service
       </Button>
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Create Service
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          Service Type
-          <TextField
-            id="outlined-basic"
-            label="Service Type"
-            variant="outlined"
-            onChange={(newValue) => setServiceType(newValue)}
-          />
-          Location
-          <TextField
-            id="outlined-basic"
-            label="Location"
-            variant="outlined"
-            onChange={(newValue) => setLocation(newValue)}
-          />
-          Price
-          <TextField
-            id="outlined-basic"
-            label="Price"
-            variant="outlined"
-            onChange={(newValue) => setPrice(newValue)}
-          />
-          Description
-          <TextField
-            id="outlined-basic"
-            label="Description"
-            variant="outlined"
-            onChange={(newValue) => setDescription(newValue)}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker
-              label="Start Datetime"
-              value={dayjs()}
-              onChange={handleStarttimeChange}
-              renderInput={(params) => <TextField {...params} />}
+          <Box
+            sx={{
+              display: "grid",
+              gap: 2,
+              gridTemplateColumns: "repeat(2, 1fr)",
+            }}
+          >
+            <Typography>Upcoming Appointments</Typography>
+            <TextField
+              id="outlined-basic"
+              label="Service Type"
+              variant="outlined"
+              onChange={(newValue) => setServiceType(newValue)}
             />
-            <DateTimePicker
-              label="End Datetime"
-              value={dayjs()}
-              onChange={handleEndtimeChange}
-              renderInput={(params) => <TextField {...params} />}
+            Location
+            <TextField
+              id="outlined-basic"
+              label="Location"
+              variant="outlined"
+              onChange={(newValue) => setLocation(newValue)}
             />
-          </LocalizationProvider>
+            Price
+            <TextField
+              id="outlined-basic"
+              label="Price"
+              variant="outlined"
+              onChange={(newValue) => setPrice(newValue)}
+            />
+            Description
+            <TextField
+              id="outlined-basic"
+              label="Description"
+              variant="outlined"
+              onChange={(newValue) => setDescription(newValue)}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                label="Start Datetime"
+                value={dayjs()}
+                onChange={handleStarttimeChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <DateTimePicker
+                label="End Datetime"
+                value={dayjs()}
+                onChange={handleEndtimeChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Create
+            Create Service
           </Button>
         </DialogActions>
       </BootstrapDialog>
