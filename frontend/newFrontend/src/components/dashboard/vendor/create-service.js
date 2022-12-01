@@ -11,13 +11,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { serverURL } from "../../../utils/config";
-// import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs, { Dayjs } from "dayjs";
-import { parse, stringify, toJSON, fromJSON } from "flatted";
 import { Box } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -60,8 +57,7 @@ BootstrapDialogTitle.propTypes = {
 
 export default function CreateService() {
   const [open, setOpen] = React.useState(false);
-  console.log("ccccccccc");
-  const id = React.useState(JSON.parse(localStorage.getItem("userId")));
+  const [userId, setUserId] = React.useState(null);
   const [serviceType, setServiceType] = React.useState("");
   const [locationn, setLocation] = React.useState("");
   const [pricee, setPrice] = React.useState("");
@@ -77,12 +73,9 @@ export default function CreateService() {
 
   const handleClose = () => {
     setOpen(false);
-    console.log("id", id);
-    console.log("sss", startDate);
-    console.log("ttt", startTime);
 
     let data = {};
-    data.user_id = 6;
+    data.user_id = userId;
     data.start_date = startDate;
     data.end_date = endDate;
     data.start_time = startTime;
@@ -95,24 +88,6 @@ export default function CreateService() {
     serviceObj.description = descriptionn;
     serviceArray.push(serviceObj);
     data.services = serviceArray;
-
-    console.log("description", descriptionn);
-    console.log("serviceee", serviceArray);
-    // const data = {
-    //   user_id: id,
-    //   end_date: endDate,
-    //   start_time: startTime,
-    //   end_time: endTime,
-    //   services: [
-    //     {
-    //       service_type: serviceType,
-    //       location: location,
-    //       price: price,
-    //       description: description,
-    //     },
-    //   ],
-    // };
-    console.log("eeeeeeeeee", data);
 
     axios
       .post(`${serverURL}/services`, data)
@@ -127,18 +102,20 @@ export default function CreateService() {
   const handleStarttimeChange = (newValue) => {
     setStartDate(newValue.format("YYYY/MM/DD"));
     setStartTime(newValue.format("HH:mm"));
-    console.log("startDate", startDate);
-    console.log("startTime", startTime);
   };
 
   const handleEndtimeChange = (newValue) => {
     setEndDate(newValue.format("YYYY/MM/DD"));
     setEndTime(newValue.format("HH:mm"));
-    console.log("endDate", endDate);
-    console.log("endTime", endTime);
   };
 
-  console.log("zzz", startDate);
+  React.useEffect(() => {
+    if (localStorage.getItem("user")) {
+      let userIdTemp = JSON.parse(localStorage.getItem("user")).id;
+      setUserId(userIdTemp);
+    }
+  }, []);
+
   return (
     <div>
       <Button variant="outlined" onClick={handleOpen}>
