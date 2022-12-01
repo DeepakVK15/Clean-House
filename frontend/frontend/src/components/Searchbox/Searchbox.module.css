@@ -1,0 +1,8 @@
+.selectContainer {
+  padding: 4px 8px;
+  border-color: rgb(148, 148, 148) !important;
+}
+
+.smallerContainer {
+  padding: 4px;
+}

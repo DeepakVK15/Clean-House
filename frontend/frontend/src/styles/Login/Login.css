@@ -1,0 +1,88 @@
+.login-page {
+    display: grid;
+    grid-template-areas:
+        "left-space top-space right-space"
+        "left-space login-form right-space"
+        "left-space bottom-space right-space";
+    grid-template-columns: auto 400px auto;
+    grid-template-rows: auto min-content auto;
+    height: 100vh;
+    width: 100vw;
+}
+
+.login-form {
+    grid-area: login-form;
+    display: flex;
+    flex-direction: column;
+}
+
+.social-btn {
+    margin-bottom: 15px;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.social-btn img {
+    height: 32px;
+    float: left;
+    margin-top: 10px;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 0 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    height: 45px;
+    line-height: 45px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all .3s cubic-bezier(.645,.045,.355,1);
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    position: relative;
+    color: rgba(0,0,0,.65);
+    background-color: transparent;
+    border-color: #e8e8e8;
+    outline: none;
+  }
+  
+  .btn-block {
+    display: block;
+    width: 89%;
+  }
+
+.login-form-item {
+    margin-bottom: 10px !important;
+}
+
+.social-btn.google {
+    margin-top: 7px;
+}
+
+.hr-sect {
+	display: flex;
+	flex-basis: 100%;
+	align-items: center;
+	color: rgba(0, 0, 0, 0.35);
+	margin: 8px 0px;
+}
+.hr-sect::before,
+.hr-sect::after {
+	content: "";
+	flex-grow: 1;
+	background: rgba(0, 0, 0, 0.35);
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 0px 8px;
+}
