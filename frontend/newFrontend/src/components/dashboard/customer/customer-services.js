@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, Typography, Button } from "@mui/material";
+import { Card, CardContent, Grid, Typography, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverURL } from "../../../utils/config";
@@ -10,12 +10,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Book from "./Book";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 export const CustomerServices = (props) => {
   const [userId, setUserId] = useState(null);
   const [allServices, setAllServices] = useState([]);
   const [bookingModal, setBookingModal] = useState(false);
   const [serviceId, setServiceId] = useState(null);
+  const [location, setLocation] = useState("San Jose");
+  const [serviceType, setServiceType] = useState("Bathroom Cleaning");
+  const [serviceDate, setServiceDate] = useState(null);
 
   const onBookingClick = (e, serviceId) => {
     e.preventDefault();
@@ -31,7 +37,11 @@ export const CustomerServices = (props) => {
 
   const getDetails = () => {
     axios
-      .get(`${serverURL}/services`)
+      .get(
+        `${serverURL}/services?location=${location}&service-type=${serviceType}&date=${
+          serviceDate ? serviceDate.toISOString().split("T")[0].replace(/-/g, "/") : "2022/12/04"
+        }`
+      )
       .then((res) => {
         setAllServices(res.data.services);
       })
@@ -42,7 +52,7 @@ export const CustomerServices = (props) => {
 
   useEffect(() => {
     getDetails();
-  }, [userId]);
+  }, [userId, location, serviceDate, serviceType]);
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -79,6 +89,36 @@ export const CustomerServices = (props) => {
                 >
                   View My Appointments
                 </Button>
+              </Grid>
+              <Grid container direction="column" spacing={2}>
+                <Grid item container direction="row" spacing={2}>
+                  <Grid item>
+                    <TextField
+                      placeholder="Location"
+                      defaultValue={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      placeholder="Service Type"
+                      defaultValue={serviceType}
+                      onChange={(e) => setServiceType(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DateTimePicker
+                        renderInput={(props) => <TextField {...props} />}
+                        label="Date"
+                        value={serviceDate}
+                        onChange={(newValue) => {
+                          setServiceDate(newValue);
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item>
