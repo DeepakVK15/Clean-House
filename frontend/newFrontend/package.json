@@ -26,6 +26,8 @@
     "axios": "^1.2.0",
     "chart.js": "3.9.1",
     "date-fns": "2.29.3",
+    "dayjs": "^1.11.6",
+    "flatted": "^3.2.7",
     "formik": "2.2.9",
     "next": "12.3.0",
     "nprogress": "0.2.0",
