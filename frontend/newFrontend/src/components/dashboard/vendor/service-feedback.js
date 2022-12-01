@@ -55,6 +55,7 @@ export default function CustomizedDialogs(id) {
   const service_id = React.useState(id);
   console.log("bbbbbbbbbbbb", service_id);
   const [feedback, setFeedback] = React.useState("");
+  const [rating, setRating] = React.useState(0);
 
   //Fix the reviews button
   const onReviewsClick = (service_id) => {
@@ -65,6 +66,7 @@ export default function CustomizedDialogs(id) {
         console.log("onReviewsClick");
         console.log("testtt3", service_id);
         setFeedback(res.data.feedback.feedback);
+        setRating(res.data.feedback.rating);
       })
       .catch((err) => {
         console.log("Err ", err);
