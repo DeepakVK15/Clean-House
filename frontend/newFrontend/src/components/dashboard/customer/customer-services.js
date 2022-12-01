@@ -56,10 +56,30 @@ export const CustomerServices = (props) => {
       <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
         <CardContent>
           <Grid container direction="column" spacing={3} sx={{ justifyContent: "space-between" }}>
-            <Grid item>
-              <Typography color="textSecondary" gutterBottom variant="overline">
-                All Services
-              </Typography>
+            <Grid item container direction="row" justifyContent={"space-between"}>
+              <Grid item>
+                <Typography
+                  color="textSecondary"
+                  gutterBottom
+                  variant="overline"
+                  sx={{
+                    fontSize: "20px",
+                  }}
+                >
+                  All Services
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.setIsServices(false);
+                  }}
+                >
+                  View My Appointments
+                </Button>
+              </Grid>
             </Grid>
             <Grid item>
               <TableContainer component={Paper}>

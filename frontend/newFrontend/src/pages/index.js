@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Button } from "@mui/material";
 import { UpcomingAppts } from "../components/dashboard/vendor/upcoming-appointments";
 import { PastAppts } from "../components/dashboard/vendor/past-appointments";
 import { DashboardLayout } from "../components/dashboard-layout";
@@ -47,6 +47,18 @@ const Page = () => {
               <CustomerServices isServices={isServices} setIsServices={setIsServices} />
             ) : (
               <>
+                <Grid item>
+                  <Button
+                    variant="text"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsServices(true);
+                    }}
+                    sx={{ fontStyle: "italic" }}
+                  >
+                    ← View All Services
+                  </Button>
+                </Grid>
                 <Grid item md={12}>
                   <UpcomingApptsCustomer />
                 </Grid>
