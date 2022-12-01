@@ -1,6 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import PeopleIcon from "@mui/icons-material/PeopleOutlined";
+import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverURL } from "../../../../../newFrontend/src/utils/config";
@@ -14,23 +12,8 @@ import Paper from "@mui/material/Paper";
 import CustomizedDialogs from "./service-feedback";
 
 export const PastAppts = (props) => {
-  const email = localStorage.getItem("email");
-  const id = localStorage.getItem("userId");
-  const userType = localStorage.getItem("user_type");
+  const [userId, setUserId] = useState(null);
   const [pastServices, setPastServices] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`${serverURL}/services/requests/${id}`)
-      .then((res) => {
-        console.log("user login");
-        console.log("testtt", res.data);
-        setPastServices(res.data.past_services);
-      })
-      .catch((err) => {
-        console.log("Err ", err);
-      });
-  }, []);
 
   //Fix the reviews button
   const onReviewsClick = (service_id) => {
@@ -46,9 +29,26 @@ export const PastAppts = (props) => {
     //   });
   };
 
+  useEffect(() => {
+    axios
+      .get(`${serverURL}/services/requests/${userId}`)
+      .then((res) => {
+        setPastServices(res.data.past_services);
+      })
+      .catch((err) => {
+        console.log("Err ", err);
+      });
+  }, [userId]);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      let userIdTemp = JSON.parse(localStorage.getItem("user")).id;
+      setUserId(userIdTemp);
+    }
+  }, []);
+
   return (
     <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
-      {/* <Card sx={{ height: "100%" }} {...props}> */}
       <CardContent>
         <Grid container direction="column" spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>

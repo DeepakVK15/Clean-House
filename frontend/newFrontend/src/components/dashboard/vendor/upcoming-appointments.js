@@ -1,9 +1,6 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import MoneyIcon from "@mui/icons-material/Money";
+import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { serverURL } from "../../../../../newFrontend/src/utils/config";
 import axios from "axios";
-import swal from "sweetalert";
 import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,44 +11,40 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 export const UpcomingAppts = (props) => {
-  const email = localStorage.getItem("email");
-  const [id, setId] = useState(localStorage.getItem("userId"));
-  // const id = localStorage.getItem("userId");
-  const userType = localStorage.getItem("user_type");
+  const [userId, setUserId] = useState(null);
   const [futureServices, setFutureServices] = useState([]);
-  // const flag = useState(0);
-
-  useEffect(() => {
-    axios
-      .get(`${serverURL}/services/requests/${id}`)
-      .then((res) => {
-        console.log("user login");
-        console.log("testtt", res.data);
-        setFutureServices(res.data.future_services);
-      })
-      .catch((err) => {
-        console.log("Err ", err);
-      });
-  }, []);
 
   const onApprovalClick = (service_id, status) => {
-    // console.log("aaaaaaaaaaaaaaa", service_id + " " + status);
     axios
       .put(`${serverURL}/services/${service_id}`, { status: status })
       .then((res) => {
         console.log("onApprovalClick");
-        console.log("testtt3", res.data);
-        // flag == 0 ? 1 : 0;
-        // setFutureServices(res.data.future_services);
       })
       .catch((err) => {
         console.log("Err ", err);
       });
   };
 
+  useEffect(() => {
+    axios
+      .get(`${serverURL}/services/requests/${userId}`)
+      .then((res) => {
+        setFutureServices(res.data.future_services);
+      })
+      .catch((err) => {
+        console.log("Err ", err);
+      });
+  }, [userId]);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      let userIdTemp = JSON.parse(localStorage.getItem("user")).id;
+      setUserId(userIdTemp);
+    }
+  }, []);
+
   return (
     <Card style={{ width: "70rem" }} sx={{ height: "100%" }} {...props}>
-      {/* <Card sx={{ height: "100%" }} {...props}> */}
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
@@ -76,7 +69,6 @@ export const UpcomingAppts = (props) => {
                 </TableHead>
                 <TableBody>
                   {futureServices.map((row) => {
-                    console.log("scdscsd", futureServices);
                     return (
                       <TableRow
                         key={row.id}

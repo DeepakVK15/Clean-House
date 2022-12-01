@@ -53,7 +53,6 @@ BootstrapDialogTitle.propTypes = {
 export default function CustomizedDialogs(id) {
   const [open, setOpen] = React.useState(false);
   const service_id = React.useState(id);
-  console.log("bbbbbbbbbbbb", service_id);
   const [feedback, setFeedback] = React.useState("");
 
   //Fix the reviews button
@@ -63,7 +62,6 @@ export default function CustomizedDialogs(id) {
       .get(`${serverURL}/feedback/${service_id}`)
       .then((res) => {
         console.log("onReviewsClick");
-        console.log("testtt3", service_id);
         setFeedback(res.data.feedback.feedback);
       })
       .catch((err) => {
@@ -77,7 +75,6 @@ export default function CustomizedDialogs(id) {
       .get(`${serverURL}/feedback/${service_id}`)
       .then((res) => {
         console.log("onReviewsClick");
-        console.log("testtt3", service_id);
         setFeedback(res.data.feedback.feedback);
       })
       .catch((err) => {

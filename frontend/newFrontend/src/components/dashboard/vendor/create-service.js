@@ -57,7 +57,7 @@ BootstrapDialogTitle.propTypes = {
 
 export default function CreateService() {
   const [open, setOpen] = React.useState(false);
-  const id = React.useState(JSON.parse(localStorage.getItem("userId")));
+  const [userId, setUserId] = React.useState(null);
   const [serviceType, setServiceType] = React.useState("");
   const [locationn, setLocation] = React.useState("");
   const [pricee, setPrice] = React.useState("");
@@ -75,7 +75,7 @@ export default function CreateService() {
     setOpen(false);
 
     let data = {};
-    data.user_id = 6;
+    data.user_id = userId;
     data.start_date = startDate;
     data.end_date = endDate;
     data.start_time = startTime;
@@ -108,6 +108,13 @@ export default function CreateService() {
     setEndDate(newValue.format("YYYY/MM/DD"));
     setEndTime(newValue.format("HH:mm"));
   };
+
+  React.useEffect(() => {
+    if (localStorage.getItem("user")) {
+      let userIdTemp = JSON.parse(localStorage.getItem("user")).id;
+      setUserId(userIdTemp);
+    }
+  }, []);
 
   return (
     <div>
