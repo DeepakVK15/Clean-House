@@ -61,15 +61,15 @@ BootstrapDialogTitle.propTypes = {
 export default function CreateService() {
   const [open, setOpen] = React.useState(false);
   console.log("ccccccccc");
-  const id = React.useState(localStorage.getItem("userId"));
+  const id = React.useState(JSON.parse(localStorage.getItem("userId")));
   const [serviceType, setServiceType] = React.useState("");
-  const [location, setLocation] = React.useState("");
-  const [price, setPrice] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [startDate, setStartDate] = React.useState();
-  const [endDate, setEndDate] = React.useState();
-  const [startTime, setStartTime] = React.useState();
-  const [endTime, setEndTime] = React.useState();
+  const [locationn, setLocation] = React.useState("");
+  const [pricee, setPrice] = React.useState("");
+  const [descriptionn, setDescription] = React.useState("");
+  const [startDate, setStartDate] = React.useState("2022/11/30");
+  const [endDate, setEndDate] = React.useState("2022/11/30");
+  const [startTime, setStartTime] = React.useState("12:30");
+  const [endTime, setEndTime] = React.useState("12:30");
 
   const handleOpen = () => {
     setOpen(true);
@@ -77,25 +77,45 @@ export default function CreateService() {
 
   const handleClose = () => {
     setOpen(false);
-    const data = {
-      user_id: id,
-      start_date: startDate,
-      end_date: endDate,
-      start_time: startTime,
-      end_time: endTime,
-      services: [
-        {
-          service_type: serviceType,
-          location: location,
-          price: price,
-          description: description,
-        },
-      ],
-    };
-    console.log("eeeeeeeeee", stringify(data));
+    console.log("id", id);
+    console.log("sss", startDate);
+    console.log("ttt", startTime);
+
+    let data = {};
+    data.user_id = 6;
+    data.start_date = startDate;
+    data.end_date = endDate;
+    data.start_time = startTime;
+    data.end_time = endTime;
+    let serviceArray = [];
+    let serviceObj = {};
+    serviceObj.service_type = serviceType;
+    serviceObj.location = locationn;
+    serviceObj.price = pricee;
+    serviceObj.description = descriptionn;
+    serviceArray.push(serviceObj);
+    data.services = serviceArray;
+
+    console.log("description", descriptionn);
+    console.log("serviceee", serviceArray);
+    // const data = {
+    //   user_id: id,
+    //   end_date: endDate,
+    //   start_time: startTime,
+    //   end_time: endTime,
+    //   services: [
+    //     {
+    //       service_type: serviceType,
+    //       location: location,
+    //       price: price,
+    //       description: description,
+    //     },
+    //   ],
+    // };
+    console.log("eeeeeeeeee", data);
 
     axios
-      .post(`${serverURL}/services`, stringify(data))
+      .post(`${serverURL}/services`, data)
       .then(() => {
         console.log("onCreateServices");
       })
@@ -118,6 +138,7 @@ export default function CreateService() {
     console.log("endTime", endTime);
   };
 
+  console.log("zzz", startDate);
   return (
     <div>
       <Button variant="outlined" onClick={handleOpen}>
@@ -140,39 +161,39 @@ export default function CreateService() {
               id="outlined-basic"
               label="Service Type"
               variant="outlined"
-              onChange={(newValue) => setServiceType(newValue)}
+              onChange={(e) => setServiceType(e.target.value)}
             />
             Location
             <TextField
               id="outlined-basic"
               label="Location"
               variant="outlined"
-              onChange={(newValue) => setLocation(newValue)}
+              onChange={(e) => setLocation(e.target.value)}
             />
             Price
             <TextField
               id="outlined-basic"
               label="Price"
               variant="outlined"
-              onChange={(newValue) => setPrice(newValue)}
+              onChange={(e) => setPrice(e.target.value)}
             />
             Description
             <TextField
               id="outlined-basic"
               label="Description"
               variant="outlined"
-              onChange={(newValue) => setDescription(newValue)}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label="Start Datetime"
-                value={dayjs()}
+                value={startDate}
                 onChange={handleStarttimeChange}
                 renderInput={(params) => <TextField {...params} />}
               />
               <DateTimePicker
                 label="End Datetime"
-                value={dayjs()}
+                value={endDate}
                 onChange={handleEndtimeChange}
                 renderInput={(params) => <TextField {...params} />}
               />
