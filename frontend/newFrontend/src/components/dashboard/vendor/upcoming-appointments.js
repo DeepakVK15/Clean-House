@@ -83,10 +83,12 @@ export const UpcomingAppts = (props) => {
                         <TableCell align="center" component="th" scope="row">
                           {row.service_type}
                         </TableCell>
-                        <TableCell align="center">{row.date}</TableCell>
+                        <TableCell align="center">
+                          {row.date.split(" ").slice(0, 4).join(" ")}
+                        </TableCell>
                         <TableCell align="center">{row.time}</TableCell>
                         <TableCell align="center">{row.location}</TableCell>
-                        <TableCell align="center">{row.price}</TableCell>
+                        <TableCell align="center">${row.price}</TableCell>
                         <TableCell align="center">{row.description}</TableCell>
                         <TableCell align="center">{row.customer_id}</TableCell>
                         <TableCell align="center">

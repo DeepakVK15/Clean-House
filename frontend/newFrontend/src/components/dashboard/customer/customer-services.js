@@ -19,8 +19,8 @@ export const CustomerServices = (props) => {
   const [allServices, setAllServices] = useState([]);
   const [bookingModal, setBookingModal] = useState(false);
   const [serviceId, setServiceId] = useState(null);
-  const [location, setLocation] = useState("San Jose");
-  const [serviceType, setServiceType] = useState("Bathroom Cleaning");
+  const [location, setLocation] = useState("");
+  const [serviceType, setServiceType] = useState("");
   const [serviceDate, setServiceDate] = useState(null);
 
   const onBookingClick = (e, serviceId) => {
@@ -39,10 +39,11 @@ export const CustomerServices = (props) => {
     axios
       .get(
         `${serverURL}/services?location=${location}&service-type=${serviceType}&date=${
-          serviceDate ? serviceDate.toISOString().split("T")[0].replace(/-/g, "/") : "2022/12/04"
+          serviceDate ? serviceDate.toISOString().split("T")[0].replace(/-/g, "/") : ""
         }`
       )
       .then((res) => {
+        console.log("res: ", res);
         setAllServices(res.data.services);
       })
       .catch((err) => {

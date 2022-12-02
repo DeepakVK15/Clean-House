@@ -82,10 +82,12 @@ export const PastAppts = (props) => {
                         <TableCell align="Center" component="th" scope="row">
                           {row.service_type}
                         </TableCell>
-                        <TableCell align="Center">{row.date}</TableCell>
+                        <TableCell align="Center">
+                          {row.date.split(" ").slice(0, 4).join(" ")}
+                        </TableCell>
                         <TableCell align="Center">{row.time}</TableCell>
                         <TableCell align="Center">{row.location}</TableCell>
-                        <TableCell align="Center">{row.price}</TableCell>
+                        <TableCell align="Center">${row.price}</TableCell>
                         <TableCell align="Center">{row.description}</TableCell>
                         <TableCell align="Center">{row.customer_id}</TableCell>
                         <TableCell align="Center">
