@@ -14,18 +14,20 @@ export const UpcomingAppts = (props) => {
   const [userId, setUserId] = useState(null);
   const [futureServices, setFutureServices] = useState([]);
 
-  const onApprovalClick = (service_id, status) => {
+  const onApprovalClick = (e, service_id, status) => {
+    e.preventDefault();
     axios
       .put(`${serverURL}/services/${service_id}`, { status: status })
       .then((res) => {
         console.log("onApprovalClick");
+        getDetails();
       })
       .catch((err) => {
         console.log("Err ", err);
       });
   };
 
-  useEffect(() => {
+  const getDetails = () => {
     axios
       .get(`${serverURL}/services/requests/${userId}`)
       .then((res) => {
@@ -34,6 +36,10 @@ export const UpcomingAppts = (props) => {
       .catch((err) => {
         console.log("Err ", err);
       });
+  };
+
+  useEffect(() => {
+    getDetails();
   }, [userId]);
 
   useEffect(() => {
@@ -97,7 +103,7 @@ export const UpcomingAppts = (props) => {
                                   type="submit"
                                   variant="outlined"
                                   size="small"
-                                  onClick={() => onApprovalClick(row.id, "REJECTED")}
+                                  onClick={(e) => onApprovalClick(e, row.id, "REJECTED")}
                                   style={{ backgroundColor: "red", color: "white" }}
                                 >
                                   Reject
@@ -107,7 +113,7 @@ export const UpcomingAppts = (props) => {
                                   type="submit"
                                   variant="outlined"
                                   size="small"
-                                  onClick={() => onApprovalClick(row.id, "APPROVED")}
+                                  onClick={(e) => onApprovalClick(e, row.id, "APPROVED")}
                                   style={{ backgroundColor: "green", color: "white" }}
                                 >
                                   Accept
