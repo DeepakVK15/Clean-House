@@ -133,7 +133,7 @@ export default function CreateService() {
               gridTemplateColumns: "repeat(2, 1fr)",
             }}
           >
-            <Typography>Upcoming Appointments</Typography>
+            <Typography>Service Type</Typography>
             <TextField
               id="outlined-basic"
               label="Service Type"
