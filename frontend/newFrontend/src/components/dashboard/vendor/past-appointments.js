@@ -98,7 +98,7 @@ export const PastAppts = (props) => {
                           >
                             View Feedback
                           </Button> */}
-                          <CustomizedDialogs id={row.id} />
+                          <CustomizedDialogs id={row.id} customer_id={row.customer_id} />
                         </TableCell>
                       </TableRow>
                     );

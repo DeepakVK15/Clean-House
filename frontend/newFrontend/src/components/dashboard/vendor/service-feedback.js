@@ -52,7 +52,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CustomizedDialogs({ id }) {
+export default function CustomizedDialogs({ id, customer_id }) {
   const [open, setOpen] = React.useState(false);
   const [feedback, setFeedback] = React.useState("");
   const [rating, setRating] = React.useState(0);
@@ -61,11 +61,17 @@ export default function CustomizedDialogs({ id }) {
     setOpen(true);
     console.log("onReviewsClick", id);
     axios
-      .get(`${serverURL}/feedback/${id}`)
+      .get(`${serverURL}/services/requests/${customer_id}`)
       .then((res) => {
         console.log("res: ", res);
-        setFeedback(res.data.feedback.feedback);
-        setRating(res.data.feedback.rating);
+        const pastServices = res.data.past_services;
+        for (let i = 0; i < pastServices.length; i++) {
+          if (pastServices[i].id == id) {
+            console.log(pastServices[i].feedback.feedback);
+            setFeedback(pastServices[i].feedback.feedback);
+            setRating(pastServices[i].feedback.rating);
+          }
+        }
       })
       .catch((err) => {
         console.log("Err ", err);
