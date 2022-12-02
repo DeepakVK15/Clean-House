@@ -50,37 +50,26 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CustomizedDialogs(id) {
+export default function CustomizedDialogs({ id }) {
   const [open, setOpen] = React.useState(false);
-  const service_id = React.useState(id);
   const [feedback, setFeedback] = React.useState("");
-
-  //Fix the reviews button
-  const onReviewsClick = (service_id) => {
-    console.log("onReviewsClick", service_id);
-    axios
-      .get(`${serverURL}/feedback/${service_id}`)
-      .then((res) => {
-        console.log("onReviewsClick");
-        setFeedback(res.data.feedback.feedback);
-      })
-      .catch((err) => {
-        console.log("Err ", err);
-      });
-  };
+  const [rating, setRating] = React.useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log("onReviewsClick", id);
     axios
-      .get(`${serverURL}/feedback/${service_id}`)
+      .get(`${serverURL}/feedback/${id}`)
       .then((res) => {
-        console.log("onReviewsClick");
+        console.log("res: ", res);
         setFeedback(res.data.feedback.feedback);
+        setRating(res.data.feedback.rating);
       })
       .catch((err) => {
         console.log("Err ", err);
       });
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -95,9 +84,7 @@ export default function CustomizedDialogs(id) {
           Feedback
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            {feedback == "" ? "No feedback provided yet!" : feedback}
-          </Typography>
+          <Typography gutterBottom>{!feedback ? "No feedback provided yet!" : feedback}</Typography>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
