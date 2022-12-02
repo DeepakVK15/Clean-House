@@ -11,6 +11,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { serverURL } from "../../../utils/config";
+import { Box } from "@mui/system";
+import { DialogContentText, Rating } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -50,37 +52,32 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CustomizedDialogs(id) {
+export default function CustomizedDialogs({ id, customer_id }) {
   const [open, setOpen] = React.useState(false);
-  const service_id = React.useState(id);
   const [feedback, setFeedback] = React.useState("");
-
-  //Fix the reviews button
-  const onReviewsClick = (service_id) => {
-    console.log("onReviewsClick", service_id);
-    axios
-      .get(`${serverURL}/feedback/${service_id}`)
-      .then((res) => {
-        console.log("onReviewsClick");
-        setFeedback(res.data.feedback.feedback);
-      })
-      .catch((err) => {
-        console.log("Err ", err);
-      });
-  };
+  const [rating, setRating] = React.useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log("onReviewsClick", id);
     axios
-      .get(`${serverURL}/feedback/${service_id}`)
+      .get(`${serverURL}/services/requests/${customer_id}`)
       .then((res) => {
-        console.log("onReviewsClick");
-        setFeedback(res.data.feedback.feedback);
+        console.log("res: ", res);
+        const pastServices = res.data.past_services;
+        for (let i = 0; i < pastServices.length; i++) {
+          if (pastServices[i].id == id) {
+            console.log(pastServices[i].feedback.feedback);
+            setFeedback(pastServices[i].feedback.feedback);
+            setRating(pastServices[i].feedback.rating);
+          }
+        }
       })
       .catch((err) => {
         console.log("Err ", err);
       });
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -95,9 +92,20 @@ export default function CustomizedDialogs(id) {
           Feedback
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            {feedback == "" ? "No feedback provided yet!" : feedback}
-          </Typography>
+          <DialogContentText>
+            <Typography gutterBottom>
+              {!feedback ? "No feedback provided yet!" : feedback}
+            </Typography>
+          </DialogContentText>
+          <DialogContentText>
+            <Box
+              sx={{
+                "& > legend": { mt: 2 },
+              }}
+            >
+              <Rating name="simple-controlled" value={rating} readOnly />
+            </Box>
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
