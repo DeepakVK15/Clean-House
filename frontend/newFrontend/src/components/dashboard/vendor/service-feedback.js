@@ -11,6 +11,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { serverURL } from "../../../utils/config";
+import { Box } from "@mui/system";
+import { DialogContentText, Rating } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -84,7 +86,20 @@ export default function CustomizedDialogs({ id }) {
           Feedback
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>{!feedback ? "No feedback provided yet!" : feedback}</Typography>
+          <DialogContentText>
+            <Typography gutterBottom>
+              {!feedback ? "No feedback provided yet!" : feedback}
+            </Typography>
+          </DialogContentText>
+          <DialogContentText>
+            <Box
+              sx={{
+                "& > legend": { mt: 2 },
+              }}
+            >
+              <Rating name="simple-controlled" value={rating} readOnly />
+            </Box>
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
